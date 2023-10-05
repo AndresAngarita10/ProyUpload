@@ -27,4 +27,10 @@ public class FileUploadRepository: GenericRepository<FileUpload>, IFileUpload
         return await _context.FileUploads
         .FirstOrDefaultAsync(p =>  p.Id == id);
     }
+
+    public async Task<IEnumerable<FileUpload>> PostFiles()
+    {
+        var files = await ();
+        return files;
+    }
 }

@@ -4,7 +4,6 @@ using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-
 namespace Application.Repository;
 
 public class FileUploadRepository: GenericRepository<FileUpload>, IFileUpload
@@ -28,9 +27,10 @@ public class FileUploadRepository: GenericRepository<FileUpload>, IFileUpload
         .FirstOrDefaultAsync(p =>  p.Id == id);
     }
 
-    public async Task<IEnumerable<FileUpload>> PostFiles()
+    public async Task<IEnumerable<FileUpload>> PostFile(FileUpload fileUpload)
     {
-        var files = await ();
-        return files;
+        _context.FileUploads.Add(fileUpload);
+        await _context.SaveChangesAsync();
+        return fileUpload;
     }
 }

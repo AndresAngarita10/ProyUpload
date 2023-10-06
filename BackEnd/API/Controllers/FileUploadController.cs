@@ -88,6 +88,9 @@ public class FileUploadController : BaseApiController
                 // Configura la respuesta como un archivo de imagen
                 var imageResult = new FileContentResult(imageBytes, "image/jpeg"); // Reemplaza con el tipo de contenido adecuado
 
+
+
+                Console.WriteLine("Foto : " + file.Extension);
                 imageResults.Add(imageResult);
             }
             else
@@ -105,7 +108,23 @@ public class FileUploadController : BaseApiController
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<IFormFile>> PostArchivos(IFormFile file)
     {
-        var filePath = "C:\\Users\\APT01-042\\Desktop\\ProyUpload\\BackEnd\\Persistence\\Data\\Archivos\\Imagenes\\" + file.FileName;
+
+        string[] validExtensionsImg = { ".jpg", ".jpeg", ".png", ".gif" };
+        string[] validDocumentExtensions = { ".pdf", ".doc", ".docx", ".txt", ".xlsx" };
+        var extension = Path.GetExtension(file.FileName).ToLower();
+        var filePath = "";
+        if (validExtensionsImg.Contains(extension))
+        {
+            filePath = "C:\\Users\\APT01-042\\Desktop\\ProyUpload\\BackEnd\\Persistence\\Data\\Archivos\\Imagenes\\" + file.FileName;
+        }
+        else if (validDocumentExtensions.Contains(extension))
+        {
+            filePath = "C:\\Users\\APT01-042\\Desktop\\ProyUpload\\BackEnd\\Persistence\\Data\\Archivos\\Documento\\" + file.FileName;
+        }
+        else
+        {
+            return null;
+        }
         using (var stream = System.IO.File.Create(filePath))
         {
             await file.CopyToAsync(stream);

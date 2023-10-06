@@ -68,32 +68,33 @@ public class FileUploadController : BaseApiController
     }
 
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status201Created)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<FileUploadDto>> PostFile([FromForm] FileUpload file)
+[ProducesResponseType(StatusCodes.Status201Created)]
+[ProducesResponseType(StatusCodes.Status400BadRequest)]
+public async Task<ActionResult<FileUploadDto>> PostFile([FromForm] FileUpload fileUpload)
+{
+    try
     {
-        try
+        if (fileUpload == null || fileUpload.Archivo == null || fileUpload.Archivo.Length == 0)
         {
-            if (file == null)
-            {
-                return BadRequest("No se proporcionó un archivo válido.");
-            }
-
-            var entidad = await this.unitOfWork.FileUploads.PostFile(file);
-            var entidadDto = new FileUploadDto
-            {
-                Id = entidad.Id,
-                Name = entidad.Name,
-                Extension = entidad.Extension,
-                Size = entidad.Size,
-                Route = entidad.Route
-            };
-
-            return CreatedAtAction(nameof(GetFile), new { id = entidad.Id }, entidadDto);
+            return BadRequest("No se proporcionó un archivo válido.");
         }
-        catch (Exception ex)
+
+        var entidad = await this.unitOfWork.FileUploads.PostFile(fileUpload);
+        var entidadDto = new FileUploadDto
         {
-            return BadRequest(ex.Message);
-        }
+            Id = entidad.Id,
+            Name = entidad.Name,
+            Extension = entidad.Extension,
+            Size = entidad.Size,
+            Route = entidad.Route
+        };
+
+        return CreatedAtAction(nameof(GetFile), new { id = entidad.Id }, entidadDto);
     }
+    catch (Exception ex)
+    {
+        return BadRequest(ex.Message);
+    }
+}
+
 }

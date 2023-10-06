@@ -36,10 +36,10 @@ public class FileUploadRepository : GenericRepository<FileUpload>, IFileUpload
 
     using (var stream = File.Create(filePath))
     {
-        await fileUpload.Contenido.CopyToAsync(stream);
+        await unitOfWork.fileUpload.CopyToAsync(stream);
     }
 
-    double size = fileUpload.Contenido.Length;
+    double size = fileUpload.Length;
     size = size / 1000000;
     size = Math.Round(size, 2);
 
@@ -51,6 +51,7 @@ public class FileUploadRepository : GenericRepository<FileUpload>, IFileUpload
 
     return fileUpload;
 }
+
 
 
 }

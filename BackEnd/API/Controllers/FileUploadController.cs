@@ -24,7 +24,7 @@ public class FileUploadController : BaseApiController
         return mapper.Map<List<FileUploadDto>>(entidad);
     }*/
 
-    
+
     /*[HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -57,7 +57,7 @@ public class FileUploadController : BaseApiController
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<FileUploadDto>> Get(int id)
+    public async Task<ActionResult<FileUploadDto>> GetFile(int id)
     {
         var entidad = await unitOfWork.FileUploads.GetByIdAsync(id);
         if (entidad == null)
@@ -70,35 +70,30 @@ public class FileUploadController : BaseApiController
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<FileUploadDto>> PostFile([FromForm] FileUploadDto file)
+    public async Task<ActionResult<FileUploadDto>> PostFile([FromForm] FileUpload file)
     {
-        var entidad = this.unitOfWork.FileUploads.PostFile(file);
         try
         {
-            if (file != null)
+            if (file == null)
             {
-                
-                var filePath = "C:\\Users\\APT01-38\\Desktop\\DG\\DOTNET\\UploadFiles\\BackEnd\\ProyUpload\\BackEnd\\Persistence\\Data\\Files\\img\\" + file.Name;
-                using (var stream = System.IO.File.Create(filePath))
-                {
-                    file.CopyToAsync(stream);
-                }
-                double size = file.Size;
-                size = size / 1000000;
-                size = Math.Round(size, 2);
-                FileUpload fileUpload = new FileUpload();
-                fileUpload.Extension = Path.GetExtension(file.FileName).Substring(1);
-                fileUpload.Name = Path.GetFileNameWithoutExtension(file.FileName);
-                fileUpload.Size = size;
-                fileUpload.Route = filePath;
-                unitOfWork.FileUploads.PostFile(fileUpload);
-                }
-            _context.SaveAsync();
+                return BadRequest("No se proporcionó un archivo válido.");
+            }
+
+            var entidad = await this.unitOfWork.FileUploads.PostFile(file);
+            var entidadDto = new FileUploadDto
+            {
+                Id = entidad.Id,
+                Name = entidad.Name,
+                Extension = entidad.Extension,
+                Size = entidad.Size,
+                Route = entidad.Route
+            };
+
+            return CreatedAtAction(nameof(GetFile), new { id = entidad.Id }, entidadDto);
         }
         catch (Exception ex)
         {
             return BadRequest(ex.Message);
         }
-        return Ok(file);
     }
 }

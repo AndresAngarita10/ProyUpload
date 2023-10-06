@@ -13,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(Assembly.GetEntryAssembly());
 builder.Services.AddAplicacionServices();
-
+builder.Services.ConfigureCors();
 builder.Services.AddDbContext<ApiContext>(options =>
 {
     string connectionString = builder.Configuration.GetConnectionString("ConexMysql");

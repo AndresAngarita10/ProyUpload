@@ -10,8 +10,8 @@ using Persistence;
 namespace Persistence.Data.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20231005020241_initialCreate")]
-    partial class initialCreate
+    [Migration("20231007215316_InitialCreateMig")]
+    partial class InitialCreateMig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,20 +28,30 @@ namespace Persistence.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Extension")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("varchar")
+                        .HasColumnName("extension");
 
                     b.Property<string>("Name")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar")
+                        .HasColumnName("name");
 
                     b.Property<string>("Route")
-                        .HasColumnType("longtext");
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("varchar")
+                        .HasColumnName("route");
 
                     b.Property<double>("Size")
-                        .HasColumnType("double");
+                        .HasColumnType("double")
+                        .HasColumnName("size");
 
                     b.HasKey("Id");
 
-                    b.ToTable("FileUploads");
+                    b.ToTable("FileUpload", (string)null);
                 });
 #pragma warning restore 612, 618
         }

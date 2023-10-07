@@ -34,9 +34,6 @@ public class FileUploadConfiguration : IEntityTypeConfiguration<FileUpload>
         .HasColumnType("varchar")
         .IsRequired()
         .HasMaxLength(250);
-
-
-
     }
 }
 

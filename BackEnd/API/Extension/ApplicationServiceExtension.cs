@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 
-
 namespace ApiFarmacia.Extension;
 
 public static class ApplicationServiceExtension

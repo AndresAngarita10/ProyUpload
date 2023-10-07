@@ -68,44 +68,40 @@ public class FileUploadController : BaseApiController
         }
         return this.mapper.Map<FileUploadDto>(entidad);
     }
-[HttpPost]
-[ProducesResponseType(StatusCodes.Status201Created)]
-[ProducesResponseType(StatusCodes.Status400BadRequest)]
-public async Task<ActionResult<FileUpload>> PostFile([FromForm] IFormFile file)
-{
-    try
+    [HttpPost("PostFile")]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<FileUpload>> PostFile(IFormFile file)
     {
-        if (file == null || file.Length == 0)
+        try
         {
-            return BadRequest("No se proporcionó un archivo válido.");
-        }
-        else
-        {
-            var filePath = "C:\\Users\\APT01-38\\Desktop\\DG\\DOTNET\\UploadFiles\\BackEnd\\ProyUpload\\BackEnd\\Persistence\\Data\\Files\\img\\" + Path.GetFileName(file.FileName);
-            
-            using (var stream = System.IO.File.Create(filePath))
+            if (file == null /* || file.Length == 0 */)
             {
-                await file.CopyToAsync(stream);
+                return BadRequest("No se proporcionó un archivo válido.");
             }
-
-            double size = file.Length / 1000000.0;
-            size = Math.Round(size, 2);
-
-            FileUpload upload = new FileUpload();
-            upload.Extension = Path.GetExtension(file.FileName).Substring(1);
-            upload.Name = Path.GetFileNameWithoutExtension(file.FileName);
-            upload.Size = size;
-            upload.Route = filePath;
-
-            await unitOfWork.FileUploads.PostFile(upload);
-
-            return CreatedAtAction(nameof(GetFile), new { id = upload.Id }, upload);
+            else
+            {
+                var filePath = "D:\\Users\\dalgr\\Documents\\Campus\\Ciclo3\\NetCore\\ProyectoUploadFile\\ProyUpload\\BackEnd\\Persistence\\Data\\Files\\img\\" + Path.GetFileName(file.FileName);
+                /* var filePath = "C:\\Users\\APT01-38\\Desktop\\DG\\DOTNET\\UploadFiles\\BackEnd\\ProyUpload\\BackEnd\\Persistence\\Data\\Files\\img\\" + Path.GetFileName(file.FileName); */
+                using (var stream = System.IO.File.Create(filePath))
+                {
+                    await file.CopyToAsync(stream);
+                }
+                double size = file.Length / 1000000.0;
+                size = Math.Round(size, 2);
+                FileUpload upload = new FileUpload();
+                upload.Extension = Path.GetExtension(file.FileName).Substring(1);
+                upload.Name = Path.GetFileNameWithoutExtension(file.FileName);
+                upload.Size = size;
+                upload.Route = filePath;
+                await unitOfWork.FileUploads.PostFile(upload);
+                return CreatedAtAction(nameof(GetFile), new { id = upload.Id }, upload);
+            }
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
         }
     }
-    catch (Exception ex)
-    {
-        return BadRequest(ex.Message);
-    }
-}
 
 }

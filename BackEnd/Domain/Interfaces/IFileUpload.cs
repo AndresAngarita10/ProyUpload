@@ -7,5 +7,5 @@ namespace Domain.Interfaces;
 
 public interface IFileUpload : IGenericRepo<FileUpload>
 {
-    Task<FileUpload> PostFile(FileUpload fileUpload);
+    Task<FileUpload> PostFile(FileUpload file);
 }

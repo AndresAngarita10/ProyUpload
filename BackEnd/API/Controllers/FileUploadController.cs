@@ -1,8 +1,10 @@
-using API.Dtos;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using System.IO;
+
 using Domain.Entities;
 using Domain.Interfaces;
-using Microsoft.AspNetCore.Mvc;
+using API.Dtos;
 
 namespace API.Controllers;
 public class FileUploadController : BaseApiController
@@ -40,7 +42,7 @@ public class FileUploadController : BaseApiController
         entidadDto.Id = entidad.Id;
         return CreatedAtAction(nameof(Post), new {id = entidadDto.Id}, entidadDto);
     }*/
-    [HttpGet]
+    [HttpGet("GetFiles")]
     public async Task<ActionResult<IEnumerable<FileUploadDto>>> Get()
     {
         var entidad = await unitOfWork.FileUploads.GetAllAsync();
@@ -66,30 +68,39 @@ public class FileUploadController : BaseApiController
         }
         return this.mapper.Map<FileUploadDto>(entidad);
     }
-
-    [HttpPost]
+[HttpPost]
 [ProducesResponseType(StatusCodes.Status201Created)]
 [ProducesResponseType(StatusCodes.Status400BadRequest)]
-public async Task<ActionResult<FileUploadDto>> PostFile([FromForm] FileUpload fileUpload)
+public async Task<ActionResult<FileUpload>> PostFile([FromForm] IFormFile file)
 {
     try
     {
-        if (fileUpload == null || fileUpload.Archivo == null || fileUpload.Archivo.Length == 0)
+        if (file == null || file.Length == 0)
         {
             return BadRequest("No se proporcionó un archivo válido.");
         }
-
-        var entidad = await this.unitOfWork.FileUploads.PostFile(fileUpload);
-        var entidadDto = new FileUploadDto
+        else
         {
-            Id = entidad.Id,
-            Name = entidad.Name,
-            Extension = entidad.Extension,
-            Size = entidad.Size,
-            Route = entidad.Route
-        };
+            var filePath = "C:\\Users\\APT01-38\\Desktop\\DG\\DOTNET\\UploadFiles\\BackEnd\\ProyUpload\\BackEnd\\Persistence\\Data\\Files\\img\\" + Path.GetFileName(file.FileName);
+            
+            using (var stream = System.IO.File.Create(filePath))
+            {
+                await file.CopyToAsync(stream);
+            }
 
-        return CreatedAtAction(nameof(GetFile), new { id = entidad.Id }, entidadDto);
+            double size = file.Length / 1000000.0;
+            size = Math.Round(size, 2);
+
+            FileUpload upload = new FileUpload();
+            upload.Extension = Path.GetExtension(file.FileName).Substring(1);
+            upload.Name = Path.GetFileNameWithoutExtension(file.FileName);
+            upload.Size = size;
+            upload.Route = filePath;
+
+            await unitOfWork.FileUploads.PostFile(upload);
+
+            return CreatedAtAction(nameof(GetFile), new { id = upload.Id }, upload);
+        }
     }
     catch (Exception ex)
     {

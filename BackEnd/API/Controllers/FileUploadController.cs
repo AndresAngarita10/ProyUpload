@@ -28,6 +28,21 @@ public class FileUploadController : BaseApiController
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpGet("GetFileById/{id}")]
+    public async Task<ActionResult<FileUploadDto>> GetById(int id)
+    {
+        var entidad = await unitOfWork.FileUploads.GetByIdAsync(id);
+        try
+        {
+            return Ok(mapper.Map<FileUploadDto>(entidad));
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
     [HttpGet("{id}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -41,6 +56,7 @@ public class FileUploadController : BaseApiController
         }
         return this.mapper.Map<FileUploadDto>(entidad);
     }
+
     [HttpPost("PostFile")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -76,7 +92,7 @@ public class FileUploadController : BaseApiController
     {
         try
         {
-            if (file == null || (file.Length > 0 && file.Length <= 20000000))
+            if (file == null /* ||  (file.Length > 0 && file.Length <= 200000000) */)
             {
                 return BadRequest("No se proporcionó un archivo válido o no cumple con peso permitido");
             }

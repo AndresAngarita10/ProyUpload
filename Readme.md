@@ -8,19 +8,19 @@
 
 [TOC]
 
-##Lenguajes:
+## Lenguajes:
 - HTML
 - CSS
 - JavaScript
 - C#
 
-##Tecnologias:
+## Tecnologias:
 - [Dotnet 7.0.4](https://dotnet.microsoft.com/en-us/download/dotnet/7.0/)
 
-##Proyecto:
-###Objetivo:
+## Proyecto:
+### Objetivo:
 Generar una API que pueda consumir archivos.
-###Descripcion
+### Descripcion
 API que contiene una entidad UploadFile, la cual se encarga de recibir un archivo, sus controller estan diseñados para soportar imagenes o documentos respectivamente, incluyen restricciones segun corresponde.
 Adicionalmente incluyen un ejemplo de pagina en HTML para consumir la API
 
@@ -30,7 +30,7 @@ Adicionalmente incluyen un ejemplo de pagina en HTML para consumir la API
 2. Tablas:
 - UploadFile:
 
-    	| id  |   name  | extension |    size    |   route  |
-    	| --- | -------- | ----------  | -------- | -------- |
-    	| int | varchar |   varchar   | double | varchar |
+    	| id  |   name  | extension |  size  |  route  |
+    	| --- | ------- | --------- | ------ | ------- |
+    	| int | varchar |  varchar  | double | varchar |
 

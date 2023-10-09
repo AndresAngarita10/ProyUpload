@@ -1,6 +1,6 @@
 # PROYUPLOAD
 
-##STAFF:
+## STAFF:
 `<Colaborador>` : <https://github.com/AndresAngarita10>
 `<Colaborador>` : <https://github.com/DJangoo00>
 

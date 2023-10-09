@@ -1,0 +1,4 @@
+{
+    "dotnet.defaultSolution": "BackEnd/ProyUpload.sln",
+    "liveServer.settings.port": 5501
+}

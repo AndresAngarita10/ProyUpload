@@ -35,7 +35,10 @@ public class FileUploadConfiguration : IEntityTypeConfiguration<FileUpload>
         .IsRequired()
         .HasMaxLength(250);
 
-
+        
+        builder.HasOne(d => d.TypeFile)
+        .WithMany(d => d.FileUploads)
+        .HasForeignKey(d => d.TypeFileFk);
 
     }
 }

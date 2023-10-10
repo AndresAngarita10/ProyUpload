@@ -53,7 +53,7 @@ public class FileUploadController : BaseApiController
     {
         var files = await unitofwork.FileUploads.GetAllAsyncByType("Image");
         List<object> imageResults = new List<object>();
-        var response = new { Image = "", id = 0 };
+        var response = new { Image = "", id = 0, size = 0.0 };
         foreach (var file in files)
         {
             var filePath = file.Route;
@@ -70,14 +70,14 @@ public class FileUploadController : BaseApiController
                 response = new
                 {
                     Image = $"data:image/png;base64,{base64Image}",
-                    id = file.Id
+                    id = file.Id,
+                    size = Convert.ToDouble(file.Size)
                 };
                 imageResults.Add(response);
             }
             else
             {
-                // Manejar el caso en el que el archivo no existe.
-                // Puedes lanzar una excepción, mostrar un mensaje de error, etc.
+                return NoContent();
             }
         }
 
@@ -118,10 +118,10 @@ public class FileUploadController : BaseApiController
                 byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
 
                 // Determina el tipo MIME adecuado para el archivo (por ejemplo, "application/pdf" para un archivo PDF).
-                string contentType = "application/" + file.Extension; // Cambia esto al tipo MIME correcto si es posible.
+                string contentType = "application/" + file.Extension;
 
                 // Establece el nombre de archivo que se mostrará al descargar el archivo.
-                string fileName = file.Name + "." + file.Extension; // Cambia esto al nombre de archivo deseado.
+                string fileName = file.Name + "." + file.Extension;
                 Console.WriteLine(file.Extension);
                 // Configura el encabezado 'content-disposition' en la respuesta.
                 Response.Headers.Add("content-disposition", "attachment; filename=" + fileName);
@@ -134,40 +134,6 @@ public class FileUploadController : BaseApiController
             return NoContent();
         }
         return NoContent();
-    }
-
-    [HttpGet("Doc")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult> GetDocs()
-    {
-        var files = await unitofwork.FileUploads.GetAllAsyncByType("Document");
-
-        foreach (var file in files)
-        {
-            var filePath = file.Route;
-
-            if (System.IO.File.Exists(filePath))
-            {
-                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
-
-                // Determine el tipo MIME adecuado para el archivo (ejemplo: application/pdf para PDF).
-                string contentType = "application/" + file.Extension; // Cambia esto al tipo MIME correcto si es posible.
-
-                // Establece el nombre de archivo que se mostrará al descargar el archivo.
-                string fileName = file.Name; // Cambia esto al nombre de archivo deseado.
-
-                return File(fileBytes, contentType, fileName);
-            }
-            else
-            {
-                // Maneja el caso en el que el archivo no existe.
-                // Puedes lanzar una excepción, mostrar un mensaje de error, etc.
-            }
-        }
-
-        // En caso de no encontrar ningún archivo, puedes devolver un resultado apropiado (por ejemplo, 404 Not Found).
-        return NotFound();
     }
 
 
@@ -192,6 +158,43 @@ public class FileUploadController : BaseApiController
         return CreatedAtAction(nameof(PostFiles), new { id = fileObject.Id }, fileObject);
 
     }
+
+
+    [HttpGet("Doc")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult> GetDocs()
+    {
+        var files = await unitofwork.FileUploads.GetAllAsyncByType("Document");
+
+        foreach (var file in files)
+        {
+            var filePath = file.Route;
+
+            if (System.IO.File.Exists(filePath))
+            {
+                byte[] fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+                // Determine el tipo MIME adecuado para el archivo (ejemplo: application/pdf para PDF).
+                string contentType = "application/" + file.Extension; 
+
+                // Establece el nombre de archivo que se mostrará al descargar el archivo.
+                string fileName = file.Name;
+
+                return File(fileBytes, contentType, fileName);
+            }
+            else
+            {
+                // Maneja el caso en el que el archivo no existe.
+                // Puedes lanzar una excepción, mostrar un mensaje de error, etc.
+            }
+        }
+
+        // En caso de no encontrar ningún archivo, puedes devolver un resultado apropiado (por ejemplo, 404 Not Found).
+        return NotFound();
+    }
+
+
 
 
     /* 

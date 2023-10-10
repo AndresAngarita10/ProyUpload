@@ -18,6 +18,8 @@ function OnButtonUpload() {
     });
 }
 
+
+//Metodo que envia el archivo al backend
 async function UploadFile(fileInput) {
     console.log(fileInput.files);
     const file = fileInput.files[0]; 
@@ -130,7 +132,8 @@ async function DownloadDocument(documentId) {
     }
 }
 
-async function fetch2() {
+//Trae todas las imagenes de la bd
+async function fetchPics() {
     try {
         const response = await fetch("http://localhost:5151/api/FileUpload/Img");
 
@@ -143,6 +146,7 @@ async function fetch2() {
                 div.innerHTML = `
                     <img class="card-img-top" src="${imageDataUrl.image}"
                         alt="Card image cap" />
+                        <label for="">size: ${imageDataUrl.size}</label>
                     <div class="card-body">
                         <a name="" id="${imageDataUrl.id}" class="btn btn-primary select-button" href="#" role="button">Seleccionar</a>
                     </div>`
@@ -210,6 +214,6 @@ async function showImage(id) {
 
 
 
-fetch2();
+fetchPics();
 OnButtonUpload();
 fetchDocumentsName();

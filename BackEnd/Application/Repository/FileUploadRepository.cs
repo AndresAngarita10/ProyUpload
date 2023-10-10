@@ -9,6 +9,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Drawing;
 using System.Drawing.Imaging;
+using iText.StyledXmlParser.Jsoup.Parser;
 
 namespace Application.Repository;
 
@@ -33,21 +34,24 @@ public class FileUploadRepository : GenericRepository<FileUpload>, IFileUpload
         .FirstAsync(p => p.Id == id);
     }
 
-    
+
     public async Task<IEnumerable<FileUpload>> GetAllDataTypeFiles(int type)
     {
         return await _context.FileUploads
             .Where(f => f.TypeFileFk == 2)
             .ToListAsync();
     }
-    
-    
-    public  async Task<IEnumerable<FileUpload>> GetAllAsyncByType(string type)
+
+
+    public async Task<IEnumerable<FileUpload>> GetAllAsyncByType(string type)
     {
         int TypeFileFk = 0;
-        if (type == "Image"){
+        if (type == "Image")
+        {
             TypeFileFk = 1;
-        }else if (type == "Document"){
+        }
+        else if (type == "Document")
+        {
             TypeFileFk = 2;
         }
         return await _context.FileUploads
@@ -55,8 +59,8 @@ public class FileUploadRepository : GenericRepository<FileUpload>, IFileUpload
             .ToListAsync();
     }
 
-    
-    public  async Task<FileUpload> GetFilenById(int id)
+
+    public async Task<FileUpload> GetFilenById(int id)
     {
         return await _context.FileUploads
             .Where(f => f.Id == id)
@@ -71,11 +75,12 @@ public class FileUploadRepository : GenericRepository<FileUpload>, IFileUpload
             // Manejar el caso en el que file o file.FileName sean nulos
             return null;
         }
-        string[] validExtensionsImg = { ".jpg", ".jpeg", ".png", ".gif", ".webp"  };
+        string[] validExtensionsImg = { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
         string[] validDocumentExtensions = { ".pdf", ".doc", ".docx", ".txt", ".xlsx" };
         var extension = Path.GetExtension(file.FileName).ToLower();
         var filePath = "";
         int type = 0;
+        long fileSizeInBytes  = 0;
         if (validExtensionsImg.Contains(extension))
         {
             type = 1;
@@ -94,6 +99,8 @@ public class FileUploadRepository : GenericRepository<FileUpload>, IFileUpload
                 encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, quality);
                 image.Save(filePath, encoder, encoderParameters);
             }
+            FileInfo fileInfo = new FileInfo(filePath);
+            fileSizeInBytes = fileInfo.Length;
         }
         else if (validDocumentExtensions.Contains(extension))
         {
@@ -111,8 +118,8 @@ public class FileUploadRepository : GenericRepository<FileUpload>, IFileUpload
         {
             return null;
         }
-        double size = file.Length; //1.048.576 
-        size = size / 1048576;
+        //double size = file.Length; //1.048.576 
+        double size = Convert.ToDouble(fileSizeInBytes) / 1048576;
         size = Math.Round(size, 2);
 
         FileUpload fileUpload = new FileUpload

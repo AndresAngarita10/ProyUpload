@@ -1,4 +1,4 @@
-
+var host = "http://localhost:5151";
 
 function OnButtonUpload() {
     const file = document.getElementById("file");
@@ -25,7 +25,7 @@ async function UploadFile(fileInput) {
     const file = fileInput.files[0]; 
 
     if (file) {
-        const apiUrl = "http://localhost:5151/api/FileUpload"; 
+        const apiUrl = `${host}/api/FileUpload`; 
         const formData = new FormData();
         formData.append("file", file);
 
@@ -51,7 +51,7 @@ async function UploadFile(fileInput) {
 
 async function fetchDocumentsName() {
     try {
-        const response = await fetch("http://localhost:5151/api/FileUpload/dataDocs");
+        const response = await fetch(`${host}/api/FileUpload/dataDocs`);
 
         if (response.ok) {
             const tbody = document.getElementById("tbody");
@@ -98,7 +98,7 @@ async function fetchDocumentsName() {
 
 async function DownloadDocument(documentId) {
     console.log(typeof(documentId));
-    const apiUrl = `http://localhost:5151/api/FileUpload/file/${parseInt(documentId)}`;
+    const apiUrl = `${host}/api/FileUpload/file/${parseInt(documentId)}`;
     try {
         const response = await fetch(apiUrl);
 
@@ -135,7 +135,7 @@ async function DownloadDocument(documentId) {
 //Trae todas las imagenes de la bd
 async function fetchPics() {
     try {
-        const response = await fetch("http://localhost:5151/api/FileUpload/Img");
+        const response = await fetch(`${host}/api/FileUpload/Img`);
 
         if (response.ok) {
             const pics = document.getElementById("pics");
@@ -171,7 +171,7 @@ async function fetchPics() {
 
 async function showImage(id) {
     try {
-        const response = await fetch("http://localhost:5151/api/FileUpload/file/" + id);
+        const response = await fetch(`${host}/api/FileUpload/file/` + id);
         // ImgShowing
         if (response.ok) {
             const data = await response.json();

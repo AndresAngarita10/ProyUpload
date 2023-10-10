@@ -196,6 +196,15 @@ public class FileUploadController : BaseApiController
 
 
 
+
+
+
+
+
+
+
+
+
     /* 
     [HttpGet("Doc")]
     [ProducesResponseType(StatusCodes.Status200OK)]

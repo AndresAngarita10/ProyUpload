@@ -1,4 +1,4 @@
-
+var host = "http://localhost:5151";
 
 function OnButtonUpload() {
     const file = document.getElementById("file");
@@ -18,12 +18,14 @@ function OnButtonUpload() {
     });
 }
 
+
+//Metodo que envia el archivo al backend
 async function UploadFile(fileInput) {
     console.log(fileInput.files);
     const file = fileInput.files[0]; 
 
     if (file) {
-        const apiUrl = "http://localhost:5151/api/FileUpload"; 
+        const apiUrl = `${host}/api/FileUpload`; 
         const formData = new FormData();
         formData.append("file", file);
 
@@ -49,7 +51,7 @@ async function UploadFile(fileInput) {
 
 async function fetchDocumentsName() {
     try {
-        const response = await fetch("http://localhost:5151/api/FileUpload/dataDocs");
+        const response = await fetch(`${host}/api/FileUpload/dataDocs`);
 
         if (response.ok) {
             const tbody = document.getElementById("tbody");
@@ -96,7 +98,7 @@ async function fetchDocumentsName() {
 
 async function DownloadDocument(documentId) {
     console.log(typeof(documentId));
-    const apiUrl = `http://localhost:5151/api/FileUpload/file/${parseInt(documentId)}`;
+    const apiUrl = `${host}/api/FileUpload/file/${parseInt(documentId)}`;
     try {
         const response = await fetch(apiUrl);
 
@@ -130,9 +132,10 @@ async function DownloadDocument(documentId) {
     }
 }
 
-async function fetch2() {
+//Trae todas las imagenes de la bd
+async function fetchPics() {
     try {
-        const response = await fetch("http://localhost:5151/api/FileUpload/Img");
+        const response = await fetch(`${host}/api/FileUpload/Img`);
 
         if (response.ok) {
             const pics = document.getElementById("pics");
@@ -143,6 +146,7 @@ async function fetch2() {
                 div.innerHTML = `
                     <img class="card-img-top" src="${imageDataUrl.image}"
                         alt="Card image cap" />
+                        <label for="">size: ${imageDataUrl.size}</label>
                     <div class="card-body">
                         <a name="" id="${imageDataUrl.id}" class="btn btn-primary select-button" href="#" role="button">Seleccionar</a>
                     </div>`
@@ -167,7 +171,7 @@ async function fetch2() {
 
 async function showImage(id) {
     try {
-        const response = await fetch("http://localhost:5151/api/FileUpload/file/" + id);
+        const response = await fetch(`${host}/api/FileUpload/file/` + id);
         // ImgShowing
         if (response.ok) {
             const data = await response.json();
@@ -210,6 +214,6 @@ async function showImage(id) {
 
 
 
-fetch2();
+fetchPics();
 OnButtonUpload();
 fetchDocumentsName();

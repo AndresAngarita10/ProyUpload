@@ -178,19 +178,18 @@ public class FileUploadController : BaseApiController
                 // Determine el tipo MIME adecuado para el archivo (ejemplo: application/pdf para PDF).
                 string contentType = "application/" + file.Extension; 
 
-                // Establece el nombre de archivo que se mostrará al descargar el archivo.
+                
                 string fileName = file.Name;
 
                 return File(fileBytes, contentType, fileName);
             }
             else
             {
-                // Maneja el caso en el que el archivo no existe.
-                // Puedes lanzar una excepción, mostrar un mensaje de error, etc.
+                
             }
         }
 
-        // En caso de no encontrar ningún archivo, puedes devolver un resultado apropiado (por ejemplo, 404 Not Found).
+        
         return NotFound();
     }
 

@@ -4,8 +4,12 @@
 `<Colaborador>` : <https://github.com/AndresAngarita10>
 `<Colaborador>` : <https://github.com/DJangoo00>
 
-## Video:
-- [YouTube](https://www.youtube.com/watch?v=EOYqG8yGNp0)
+## Material AudioVisual:
+- 
++ Instructivo:
+    + [Documento](https://docs.google.com/document/d/19J7EKegzOwjvSMPM6iHk4Y_K0dxpPlbM/edit?usp=sharing&ouid=109141888634537685486&rtpof=true&sd=true)
++ Video:
+    + [YouTube](https://www.youtube.com/watch?v=EOYqG8yGNp0)
 
 **Table of Contents**
 

@@ -4,6 +4,9 @@
 `<Colaborador>` : <https://github.com/AndresAngarita10>
 `<Colaborador>` : <https://github.com/DJangoo00>
 
+## Video:
+- [YouTube](https://www.youtube.com/watch?v=EOYqG8yGNp0)
+
 **Table of Contents**
 
 [TOC]
@@ -33,4 +36,17 @@ Adicionalmente incluyen un ejemplo de pagina en HTML para consumir la API
     	| id  |   name  | extension |  size  |  route  |
     	| --- | ------- | --------- | ------ | ------- |
     	| int | varchar |  varchar  | double | varchar |
+
+  - TypeFile:
+
+    	| id  | description |
+    	| --- | ----------- |
+    	| int |   varchar   |
+
+## Dependencias Importantes: 
+
+Ubicacion: Application
+- System.Drawing.Common
+- System.IO.Compression
+
 
